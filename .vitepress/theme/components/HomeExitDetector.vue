@@ -1,6 +1,6 @@
 <template>
-  <WelcomeModal
-    ref="modalRef"
+  <WelcomeNotice
+    ref="noticeRef"
     :image-url="modalConfig.imageUrl"
     :title="modalConfig.title"
     :description="modalConfig.description"
@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import {ref, onMounted, onUnmounted} from 'vue'
 import {useRouter} from 'vitepress'
-import WelcomeModal from './WelcomeModal.vue'
+import WelcomeNotice from './WelcomeNotice.vue'
 import PartyImage from './images/qrcode.jpeg'
 
 interface ModalConfig {
@@ -32,7 +32,7 @@ const props = withDefaults(defineProps<{
   config: () => ({})
 })
 
-const modalRef = ref()
+const noticeRef = ref()
 const router = useRouter()
 
 // 弹窗配置
@@ -81,11 +81,11 @@ const handleRouteChange = () => {
   const currentPath = router.route.path
   const isCurrentlyHome = isHomePage(currentPath)
 
-  // 如果从主页离开到其他页面，且未显示过弹窗
+  // 如果从主页离开到其他页面，且未显示过通知
   if (wasOnHomePage && !isCurrentlyHome && !hasShownModal()) {
     setTimeout(() => {
-      modalRef.value?.openModal()
-    }, 500) // 延迟500ms显示，确保页面切换完成
+      noticeRef.value?.open()
+    }, 500)
   }
 
   wasOnHomePage = isCurrentlyHome
